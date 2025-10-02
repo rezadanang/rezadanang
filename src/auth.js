@@ -7,7 +7,6 @@ dotenv.config();
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Register
 export async function register(req, res) {
   const { email, password } = req.body;
   try {
@@ -23,7 +22,7 @@ export async function register(req, res) {
       secure: process.env.NODE_ENV === 'production', 
       sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000,
-      path: '/'
+      path: '/register'
     });
 
     res.json({ token });
@@ -32,7 +31,6 @@ export async function register(req, res) {
   }
 }
 
-// Login
 export async function login(req, res) {
   const { email, password } = req.body;
   try {
@@ -48,7 +46,7 @@ export async function login(req, res) {
       secure: process.env.NODE_ENV === 'production', 
       sameSite: 'strict',
       maxAge: 24 * 60 * 60 * 1000,
-      path: '/'
+      path: '/login'
     });
 
     res.json({ token });
@@ -57,20 +55,18 @@ export async function login(req, res) {
   }
 }
 
-// Logout
 export async function logout(req, res) {
   res.cookie('token', '', {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
     expires: new Date(0),
-    path: '/'
+    path: '/logout'
   });
 
   res.status(200).json({ message: "Logged out successfully" });
 }
 
-// Get current user info
 export async function me(req, res) {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: "No token provided" });

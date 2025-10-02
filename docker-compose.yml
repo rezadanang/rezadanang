@@ -1,4 +1,3 @@
-version: '3.9'
 
 services:
   db:
@@ -24,7 +23,6 @@ services:
       - .env
     volumes:
       - .:/usr/src/app:cached
-      -  /usr/src/app/node_modules   # Jangan mount node_modules dari host
-
+      -  /usr/src/app/node_modules
 volumes:
   db_data:

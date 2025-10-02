@@ -7,10 +7,10 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 
-app.post("/register", register);
-app.post("/login", login);
-app.post("/logout", logout);
-app.get("/me", me);
+app.post("/api/register", register);
+app.post("/api/login", login);
+app.post("/api/logout", logout);
+app.get("/api/me", me);
 
 app.get("/", (req, res) => res.send("Server running"));
 

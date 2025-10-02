@@ -16,16 +16,8 @@ export async function register(req, res) {
     const hashed = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({ data: { email, password: hashed } });
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1d' });
-    res.cookie('token', token, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production', 
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/register'
-    });
-
-    res.json({ token });
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1d" });
+    res.json({ token }); // <-- cukup balikin token di JSON
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -40,30 +32,15 @@ export async function login(req, res) {
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) return res.status(400).json({ error: "Invalid credentials" });
 
-    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1d' });
-    res.cookie('token', token, { 
-      httpOnly: true, 
-      secure: process.env.NODE_ENV === 'production', 
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000,
-      path: '/login'
-    });
-
-    res.json({ token });
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: "1d" });
+    res.json({ token }); // <-- cukup balikin token di JSON
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 }
 
 export async function logout(req, res) {
-  res.cookie('token', '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    expires: new Date(0),
-    path: '/logout'
-  });
-
+  // kalau pakai header Authorization, logout cukup info aja
   res.status(200).json({ message: "Logged out successfully" });
 }
 
